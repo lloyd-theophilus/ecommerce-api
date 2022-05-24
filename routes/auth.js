@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const CryptoJS = require("crypto-js");
 const User = require('../models/user')
-
+const jwt = require('jsonwebtoken')
 
 //Register users
 router.post('/register', async (req, res) => {
@@ -25,9 +25,11 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
+        const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
         const decrypted = CryptoJS.AES.decrypt(user.password, process.env.PRIVATE_KEY).toString(CryptoJS.enc.Utf8)
         if (decrypted === req.body.password) {
-            res.json({ message: 'User logged in' })
+            res.json({ message: 'User logged in', accessToken })      
         } else {
             res.status(401).json({ message: 'Incorrect password' })
         }
