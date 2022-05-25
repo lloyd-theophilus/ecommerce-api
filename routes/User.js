@@ -52,6 +52,37 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
     }
 })
 
+// Get user stats, users per month and year
+router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
+    const date = new Date();
+    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+    try {
+        const users = await User.find({ createdAt: { $gte: lastYear } })
+        const usersPerMonth = await User.aggregate([
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": 1,
+                    "_id.month": 1
+                }
+            }
+        ])
+        res.json({ users, usersPerMonth })
+    } catch (error) {
+        res.json({ message: error })
+    }
+        
+    })
+
 
 
 
