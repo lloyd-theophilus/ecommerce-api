@@ -1,3 +1,4 @@
+const { query } = require('express')
 const User = require('../models/user')
 const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('./verifyToken')
 const router = require('express').Router()
@@ -38,8 +39,13 @@ router.get('/find/:id', verifyTokenAndAdmin, async (req, res) => {
 
 //Get all users
 router.get('/', verifyTokenAndAdmin, async (req, res) => { 
+    //Condition to return new users
+    const query = req.query.new;
     try {
-        const users = await User.find()
+        //Condition to return limited number of new users
+        const users = query
+            ? await User.find().sort({ _id: -1 }).limit(10)
+            : await User.find();
         res.json(users)
     } catch (err) {
         res.json({ message: err })
