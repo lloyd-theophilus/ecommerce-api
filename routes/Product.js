@@ -18,8 +18,18 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
   catch (err) {
     res.status(400).json({ message: 'You cannot create a new product at this time' });
   }
-  
- });
+});
+ 
+// Put request to update a product
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => { 
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true }
+    );
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res.status(404).json({ message: "Product not found" });
+  }
+})
 
 
 
