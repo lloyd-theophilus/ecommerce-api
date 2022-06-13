@@ -23,17 +23,23 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
 // Put request to update a product
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => { 
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true }
+    await Product.findByIdAndUpdate(req.params.id, req.body, { new: true }
     );
     res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(404).json({ message: "Product not found" });
+    res.status(404).json({ message: "Product has been updated successfully" });
   }
 })
 
-
-
-
+// Delete request to delete a product
+router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+  try {
+   await Product.findByIdAndDelete(req.params.id);
+    res.status(200).json('Product has been deleted successfully');
+  } catch (error) {
+    res.status(404).json({ message: "Product not found" });
+  }
+ });
 
 
 
