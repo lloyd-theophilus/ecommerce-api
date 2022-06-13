@@ -1,5 +1,5 @@
-const { query } = require("express");
-const Product = require("../models/product");
+const express = require("express");
+const Cart = require("../models/product");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -58,3 +58,5 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
         res.status(404).json({ message: "Item not found" });
     }
 })
+
+module.exports = router;

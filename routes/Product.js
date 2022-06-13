@@ -1,4 +1,4 @@
-const { query } = require("express");
+const exoress = require("express");
 const Product = require("../models/product");
 const {
   verifyToken,
@@ -78,13 +78,5 @@ router.get("/", async (req, res) => {
     res.status(404).json({ message: "Products not found" });
   }
  })
-
-
-
-
-
-
-
-
 
 module.exports = router;
