@@ -48,7 +48,7 @@ router.get('/', verifyTokenAndAdmin, async (req, res) => {
             : await User.find();
         res.json(users)
     } catch (err) {
-        res.json({ message: err })
+        res.json({ message: 'No Users found at this time' })
     }
 })
 
@@ -78,7 +78,7 @@ router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
         ])
         res.json({ users, usersPerMonth })
     } catch (error) {
-        res.json({ message: error })
+        res.json({ message: 'No user stats data to display at this time' })
     }
         
     })
