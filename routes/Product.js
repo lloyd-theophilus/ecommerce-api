@@ -39,7 +39,17 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: "Product not found" });
   }
- });
+});
+ 
+// Get request to get a product by id (Accessed by everyone)
+router.get("/find/:id", async (req, res) => { 
+  try {
+    const product = await Product.findById(req.params.id);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({ message: "Product not found" });
+  }
+   })
 
 
 
