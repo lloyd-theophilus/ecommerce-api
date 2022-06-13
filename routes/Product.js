@@ -41,7 +41,7 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
  
-// Get request to get a product by id (Accessed by everyone)
+// Get request to get a product by id (Accessed by the admin and the user)
 router.get("/find/:id", async (req, res) => { 
   try {
     const product = await Product.findById(req.params.id);
@@ -49,7 +49,36 @@ router.get("/find/:id", async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: "Product not found" });
   }
-   })
+})
+   
+// Get request to get all products (Accessed by the admin and the user) but based on qquery and category
+router.get("/", async (req, res) => { 
+  //Condition to return new products
+  const newQuery = req.query.new;
+  const categoryQuery = req.query.category;
+  try {
+    let products;
+
+    //Condition to return limited number of new products based on category and newQuery
+    if (newQuery) {
+      products = await Product.find().sort({ createdAt: 1 }).limit(3);
+    } else if (categoryQuery) {
+      products = await Product.find({
+        categories: { $in: [categoryQuery] }
+      });
+    }
+    //Condition to return all products
+    else {
+      products = await Product.find();
+    } 
+
+    res.status(200).json(products);
+
+  } catch (error) {
+    res.status(404).json({ message: "Products not found" });
+  }
+ })
+
 
 
 
