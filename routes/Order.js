@@ -7,14 +7,14 @@ const {
 } = require("./verifyToken");
 const router = require("express").Router();
 
-// Post request to make an order
+// Post request to create an order
 router.post("/", verifyToken, async (req, res) => { 
     const newOrder = new Order(req.body);
     try {
         const savedOrder = await newOrder.save();
         res.status(201).json(savedOrder);
     } catch (error) {
-        res.status(400).json({ message: "You cannot make an oder at this time" }); 
+        res.status(400).json({ message: "You cannot create an oder at this time" }); 
     }
 })
 
@@ -42,7 +42,7 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 // Get request to get user Orders by id (Accessed by the admin and the user)
 router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => { 
   try {
-    const orders = await Order.find({ userId: req.params.userId });
+    const orders = await Order.find({ _id: req.params.userId });
     res.status(200).json(orders);
   } catch (error) {
     res.status(404).json({ message: "Item not found" });
@@ -89,6 +89,4 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
 })
 
  
-
-
 module.exports = router;

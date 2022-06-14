@@ -42,7 +42,7 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
 // Get request to get user Cart by id (Accessed by the admin and the user)
 router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => { 
   try {
-    const cart = await Cart.findOne({ userId: req.params.userId });
+    const cart = await Cart.findOne({ _id: req.params.userId });
     res.status(200).json(cart);
   } catch (error) {
     res.status(404).json({ message: "Item not found" });
